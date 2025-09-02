@@ -18,38 +18,23 @@
 
 
 
-
-# cloudbuild-frontend.yaml
+# cloudbuild-frontend-simple.yaml
 steps:
-  # Backend URL'sini al
-  - name: gcr.io/cloud-builders/gcloud
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        BACKEND_URL=$(gcloud run services describe bank-backend --region=northamerica-northeast2 --format="value(status.url)")
-        echo "Backend URL: $BACKEND_URL"
-        echo $BACKEND_URL > /workspace/backend-url.txt
-    id: Get Backend URL
-  
-  # Frontend'i build et
   - name: gcr.io/cloud-builders/docker
-    entrypoint: 'bash'
     args:
-      - '-c'
-      - |
-        BACKEND_URL=$(cat /workspace/backend-url.txt)
-        docker build \
-          --build-arg REACT_APP_API_URL=$BACKEND_URL \
-          -t northamerica-northeast1-docker.pkg.dev/molten-unison-462818-r2/app-repo/bank-frontend:$COMMIT_SHA \
-          -f frontend/Dockerfile \
-          ./frontend
+      - build
+      - '--build-arg'
+      - 'REACT_APP_API_URL=https://bank-backend-135897197036.northamerica-northeast2.run.app'
+      - '-t'
+      - 'northamerica-northeast2-docker.pkg.dev/molten-unison-462818-r2/app-repo/bank-frontend:$COMMIT_SHA'
+      - .
+
     id: Build Frontend Container Image
   
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - 'northamerica-northeast1-docker.pkg.dev/molten-unison-462818-r2/app-repo/bank-frontend:$COMMIT_SHA'
+      - 'northamerica-northeast2-docker.pkg.dev/molten-unison-462818-r2/app-repo/bank-frontend:$COMMIT_SHA'
     id: Push Frontend Image to Artifact Registry
   
   - name: gcr.io/cloud-builders/gcloud
@@ -58,20 +43,15 @@ steps:
       - deploy
       - bank-frontend
       - '--image'
-      - 'northamerica-northeast1-docker.pkg.dev/molten-unison-462818-r2/app-repo/bank-frontend:$COMMIT_SHA'
+      - 'northamerica-northeast2-docker.pkg.dev/molten-unison-462818-r2/app-repo/bank-frontend:$COMMIT_SHA'
       - '--region'
-      - northamerica-northeast1
+      - northamerica-northeast2
       - '--platform'
       - managed
       - '--port'
       - '80'
-      - '--timeout'
-      - '300'
-      - '--set-env-vars'
-      - 'PORT=80'
     id: Deploy Frontend to Cloud Run
 images:
-  - 'northamerica-northeast1-docker.pkg.dev/molten-unison-462818-r2/app-repo/bank-frontend:$COMMIT_SHA'
+  - 'northamerica-northeast2-docker.pkg.dev/molten-unison-462818-r2/app-repo/bank-frontend:$COMMIT_SHA'
 options:
   logging: CLOUD_LOGGING_ONLY
-timeout: 1200s
