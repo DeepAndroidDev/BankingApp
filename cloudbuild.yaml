@@ -18,7 +18,7 @@
 
 
 
-#  cloudbuild-frontend-simple.yaml
+#   cloudbuild-frontend-simple.yaml
 steps:
   - name: gcr.io/cloud-builders/docker
     args:
