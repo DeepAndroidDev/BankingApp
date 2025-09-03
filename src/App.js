@@ -72,7 +72,7 @@ export default function App() {
       <Box sx={{ display: 'flex' }}>
         <NavigationBar handleDrawerToggle={handleDrawerToggle} primary='FDM Bank'>
           <NavigationBarLink primary='Log In'/>
-          <NavigationBarLink primary='Registerr'/>
+          <NavigationBarLink primary='Register'/>
         </NavigationBar>
         <NavigationDrawer handleDrawerClose={handleDrawerClose} isMobileOpen={isMobileOpen} drawerWidth={drawerWidth}>
           <NavigationDrawerLink primary='Accounts' onClick={() => navigate('/accounts')} />
