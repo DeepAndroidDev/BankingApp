@@ -1,4 +1,15 @@
 steps:
+- name: node20
+entrypoint: npm
+args: [install]
+
+- name: node20
+entrypoint: npm
+args: ["run","build"]
+
+env: 
+- ["REACT_APP_API_URL=https://backend-service-566774248861.northamerica-northeast2.run.app"]
+
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
