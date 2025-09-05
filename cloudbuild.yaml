@@ -5,7 +5,7 @@ steps:
       [
         'build',
         '-t',
-        'northamerica-northeast2-docker.pkg.dev/bankfrontendapp/bank-repo/react-app:$SHORT_SHA',
+        'northamerica-northeast2-docker.pkg.dev/bankfrontendapp/bank-repo/frontend:$COMMIT_SHA',
         '.'
       ]
 
@@ -14,7 +14,7 @@ steps:
     args:
       [
         'push',
-        'northamerica-northeast2-docker.pkg.dev/bankfrontendapp/bank-repo/react-app:$SHORT_SHA'
+        'northamerica-northeast2-docker.pkg.dev/bankfrontendapp/bank-repo/frontend:$COMMIT_SHA'
       ]
 
   # Step 3: Deploy to Cloud Run
@@ -26,7 +26,7 @@ steps:
         'deploy',
         'react-app',
         '--image',
-        'northamerica-northeast2-docker.pkg.dev/bankfrontendapp/bank-repo/react-app:$SHORT_SHA',
+        'northamerica-northeast2-docker.pkg.dev/bankfrontendapp/bank-repo/frontend:$COMMIT_SHA',
         '--region',
         'northamerica-northeast2',
         '--platform',
@@ -35,7 +35,7 @@ steps:
       ]
 
 images:
-  - 'northamerica-northeast2-docker.pkg.dev/bankfrontendapp/bank-repo/react-app:$SHORT_SHA'
+  - 'northamerica-northeast2-docker.pkg.dev/bankfrontendapp/bank-repo/frontend:$COMMIT_SHA'
 
 options:
   logging: CLOUD_LOGGING_ONLY
